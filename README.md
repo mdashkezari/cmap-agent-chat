@@ -1,6 +1,8 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19456099.svg)](https://doi.org/10.5281/zenodo.19456099)
+
 # CMAP Chat UI (React SPA)
 
-This repository is the **frontend** for the CMAP Agent API hosted at:
+This repository is the frontend for the CMAP Agent API hosted at:
 
 - API (prod): https://agent.simonscmap.ai
 
@@ -21,7 +23,7 @@ Application domains:
 - Render tool trace
 - Render artifacts (inline images + downloads)
 - Render returned code snippets (shown as Python) with a Copy button
-- Show **Examples** (clickable prompt cards) loaded from `src/data/examples.json`
+- Show Examples (clickable prompt cards) loaded from `src/data/examples.json`
 
 ## Editing the built-in examples
 
@@ -101,14 +103,5 @@ API and docs live on a different subdomain:
 - Docs: https://agent.simonscmap.ai/docs
 
 As long as we **do not change the DNS/ALB for `agent.simonscmap.ai`**, hosting the SPA on `simonscmap.ai` will not affect API access.
-
-## Docs
-- `docs/ROADMAP.md`
-- `docs/API_CONTRACT.md`
-- `docs/SECURITY_NOTES.md`
-
----
-
-### License
 
 
