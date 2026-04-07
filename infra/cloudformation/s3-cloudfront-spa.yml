@@ -1,0 +1,161 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  CMAP Chat frontend - S3 private bucket + CloudFront distribution for a React SPA
+  with SPA routing (403/404 -> /index.html) and optional redirect function for chat. subdomain.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: cmap-chat
+  BucketName:
+    Type: String
+    Description: "S3 bucket name to host the SPA assets (must be globally unique)."
+  AcmCertificateArn:
+    Type: String
+    Description: "ACM certificate ARN in us-east-1 (required for CloudFront HTTPS)."
+  ApexDomainName:
+    Type: String
+    Default: simonscmap.ai
+  AlternateDomainName:
+    Type: String
+    Default: chat.simonscmap.ai
+
+Resources:
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      VersioningConfiguration:
+        Status: Enabled
+
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontRead
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action:
+              - s3:GetObject
+            Resource: !Sub "${SiteBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${SiteDistribution}"
+
+  OriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${ProjectName}-oac"
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+        Description: "OAC for private S3 origin"
+
+  RedirectFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub "${ProjectName}-redirect-chat-to-apex"
+      AutoPublish: true
+      FunctionConfig:
+        Comment: "Redirect chat.simonscmap.ai to simonscmap.ai"
+        Runtime: cloudfront-js-2.0
+      FunctionCode: !Sub |
+        function handler(event) {
+          var request = event.request;
+          var headers = request.headers;
+
+          function buildQueryString(qs) {
+            if (!qs) return "";
+            var parts = [];
+            for (var k in qs) {
+              if (!Object.prototype.hasOwnProperty.call(qs, k)) continue;
+              var v = qs[k] && qs[k].value !== undefined ? qs[k].value : "";
+              if (v === "") {
+                parts.push(encodeURIComponent(k));
+              } else {
+                parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(v));
+              }
+            }
+            return parts.length ? "?" + parts.join("&") : "";
+          }
+
+          var host = headers.host && headers.host.value ? headers.host.value.toLowerCase() : "";
+          if (host === "${AlternateDomainName}") {
+            var uri = request.uri || "/";
+            var qs = buildQueryString(request.querystring);
+            return {
+              statusCode: 301,
+              statusDescription: "Moved Permanently",
+              headers: { "location": { "value": "https://${ApexDomainName}" + uri + qs } }
+            };
+          }
+          return request;
+        }
+
+  SiteDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub "${ProjectName} SPA"
+        DefaultRootObject: index.html
+        HttpVersion: http2
+        PriceClass: PriceClass_100
+        IPV6Enabled: true
+        Aliases:
+          - !Ref ApexDomainName
+          - !Ref AlternateDomainName
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+        Origins:
+          - Id: s3origin
+            DomainName: !GetAtt SiteBucket.RegionalDomainName
+            S3OriginConfig: {}
+            OriginAccessControlId: !Ref OriginAccessControl
+        DefaultCacheBehavior:
+          TargetOriginId: s3origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS]
+          CachedMethods: [GET, HEAD, OPTIONS]
+          Compress: true
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt RedirectFunction.FunctionMetadata.FunctionARN
+
+        CustomErrorResponses:
+          # SPA routing: map 403/404 from S3 to /index.html with 200
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 0
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 0
+
+Outputs:
+  BucketName:
+    Value: !Ref SiteBucket
+  CloudFrontDistributionId:
+    Value: !Ref SiteDistribution
+  CloudFrontDomainName:
+    Value: !GetAtt SiteDistribution.DomainName

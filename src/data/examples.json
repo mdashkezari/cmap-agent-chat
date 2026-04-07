@@ -1,0 +1,92 @@
+[
+  {
+    "id": "bats_summary",
+    "title": "Summarize BATS datasets",
+    "description": "Overview of BATS-related datasets in CMAP (coverage, key variables, and usage notes).",
+    "category": "Data discovery",
+    "tags": ["metadata", "BATS", "summary"],
+    "expected_artifacts": [],
+    "prompt": "Can you summarize the BATS (Bermuda Atlantic Time-series Study) datasets available in CMAP? Please include: (1) what each dataset contains, (2) temporal/spatial coverage, (3) key variables, and (4) any notes on units and quality flags."
+  },
+  {
+    "id": "nutrients_region_search",
+    "title": "Find nutrient datasets for a region",
+    "description": "Recommend CMAP datasets with nutrient variables (nitrate/phosphate/silicate) for a specified lat/lon box.",
+    "category": "Data discovery",
+    "tags": ["datasets", "nutrients", "region"],
+    "expected_artifacts": [],
+    "prompt": "I'm looking for nutrient datasets that cover this region: lat1=-35, lat2=-25, lon1=-179, lon2=-175. What CMAP datasets would you recommend, and what nutrient variables do they provide (e.g., nitrate, phosphate, silicate)?"
+  },
+  {
+    "id": "armbrust_contributions",
+    "title": "List datasets contributed by the Armbrust group",
+    "description": "Find datasets by contributor/lab and provide a short, readable list.",
+    "category": "Data discovery",
+    "tags": ["contributors", "Armbrust", "metadata"],
+    "expected_artifacts": [],
+    "prompt": "What CMAP datasets have been contributed by the Armbrust group? Please list dataset names/titles and a one-line description for each."
+  },
+  {
+    "id": "subset_darwin_nitrate_december",
+    "title": "Download a nitrate subset (Darwin climatology, December)",
+    "description": "Extract a small 4D subset and return a downloadable file + a quick summary.",
+    "category": "Subsetting & download",
+    "tags": ["subset", "download", "nitrate", "climatology"],
+    "expected_artifacts": ["data"],
+    "prompt": "Return a subset of nitrate from the Darwin climatology model dataset (tblDarwin_Nutrient_Climatology) for December over this region: lat1=25, lat2=35, lon1=-179, lon2=-175, depth1=0, depth2=5 m. Please return the data as a downloadable file and summarize the number of rows and variables."
+  },
+  {
+    "id": "map_cloud_base_height_1945_12",
+    "title": "Global map of cloud base height (Dec 1945)",
+    "description": "Create a visualization and return it as an image.",
+    "category": "Visualization",
+    "tags": ["map", "cloud base height", "image"],
+    "expected_artifacts": ["image"],
+    "prompt": "Make a global map of cloud base height for December 1945. Use an appropriate dataset available in CMAP and return the plot as an image."
+  },
+  {
+    "id": "map_sst_global_2023_05_09",
+    "title": "Global map of satellite SST (May 9, 2023)",
+    "description": "Create a global SST map for a specific date and return the image.",
+    "category": "Visualization",
+    "tags": ["map", "SST", "satellite", "image"],
+    "expected_artifacts": ["image"],
+    "prompt": "Can you make a global map of satellite SST (sst in tblSST_AVHRR_OI_NRT) on May 9, 2023 using Robinson projection?"
+  },
+  {
+    "id": "timeseries_sst_region_2020",
+    "title": "Regional SST time series (Jun-Jul 2020)",
+    "description": "Compute and plot a time series averaged over a region; return an image (and optionally the data).",
+    "category": "Visualization",
+    "tags": ["time series", "SST", "image"],
+    "expected_artifacts": ["image", "data"],
+    "prompt": "Make a time series plot of satellite SST (sst in tblSST_AVHRR_OI_NRT) within a region (lat1=20, lat2=22, lon1=-179, lon2=-176) from June 1 2020 to July 15 2020."
+  },
+  {
+    "id": "colocalize_uw_student_cruise_tp_sst_nitrate",
+    "title": "Colocalize a cruise expedition dataset with atmospheric data, satellite SST, and Nitrate climatology",
+    "description": "Join an in-situ dataset to gridded products by time/lat/lon; return a merged table or download link.",
+    "category": "Colocalization",
+    "tags": ["colocalize", "Precipitation", "SST", "Nitrate"],
+    "expected_artifacts": ["data"],
+    "prompt": "Can you colocalize the 'Discrete Flow Cytometry of Underway Samples from TN427 Using a BD Influx Cell Sorter' dataset with: \ntotal precipitation (tp in tblERA5_monthly_averaged_single_level) from ERA5 dataset, \nand daily satellite SST (sst in tblSST_AVHRR_OI_NRT), \nand Nitrate monthly climatology from the World Ocean Atlas 2013 v2 Climatology dataset (nitrate_WOA_clim in tblWOA_Climatology)?"
+  },
+  {
+    "id": "colocalize_bigrupa_chl",
+    "title": "Colocalize in-situ data with satellite Chlorophyll",
+    "description": "Join an in-situ dataset to a gridded product by time/lat/lon; return a merged table or download link.",
+    "category": "Colocalization",
+    "tags": ["colocalize", "bottle data", "Chlorophyll", "satellite"],
+    "expected_artifacts": ["data"],
+    "prompt": "Can you colocalize the 'C-MORE BiG-RAPA MV1015 Downcast Bottle Data' dataset with: \nsatellite chl (chlor_a in tblModis_CHL_cl1)?"
+  },
+  {
+    "id": "colocalize_bios_scope_tp_sst_phosphate",
+    "title": "(Takes Several Minutes!) Integrate BIOS-SCOPE survey dataset with atmospheric data, satellite SST, and Phosphate Darwin climatology",
+    "description": "Join an in-situ dataset to gridded products by time/lat/lon; return a merged table or download link.",
+    "category": "Colocalization",
+    "tags": ["colocalize", "Precipitation", "SST", "Phosphate"],
+    "expected_artifacts": ["data"],
+    "prompt": "Can you integrate the 'BIOS-SCOPE Biogeochemical Survey' dataset with: \ndaily satellite SST data (sst in tblSST_AVHRR_OI_NRT), \nPhosphate climatology from Darwin model (PO4_darwin_clim in tblDarwin_Nutrient_Climatology), \nand total precipitation from ERA5 dataset (tp in tblERA5_monthly_averaged_single_level)?"
+  }  
+]
