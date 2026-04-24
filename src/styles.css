@@ -133,3 +133,158 @@ textarea:focus {
   font-size: 12px;
   opacity: 0.85;
 }
+
+/* Markdown rendering for assistant messages.
+ * Tuned to stay quiet and consistent with the rest of the chat UI.
+ */
+.cmap-md {
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.cmap-md > *:first-child {
+  margin-top: 0;
+}
+
+.cmap-md > *:last-child {
+  margin-bottom: 0;
+}
+
+.cmap-md p {
+  margin: 0.5em 0;
+}
+
+.cmap-md h1,
+.cmap-md h2,
+.cmap-md h3,
+.cmap-md h4,
+.cmap-md h5,
+.cmap-md h6 {
+  margin: 0.9em 0 0.4em;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.cmap-md h1 {
+  font-size: 1.25em;
+}
+
+.cmap-md h2 {
+  font-size: 1.15em;
+}
+
+.cmap-md h3 {
+  font-size: 1.05em;
+}
+
+.cmap-md h4,
+.cmap-md h5,
+.cmap-md h6 {
+  font-size: 1em;
+}
+
+.cmap-md ul,
+.cmap-md ol {
+  margin: 0.4em 0;
+  padding-left: 1.4em;
+}
+
+.cmap-md li {
+  margin: 0.2em 0;
+}
+
+.cmap-md li > p {
+  margin: 0.2em 0;
+}
+
+.cmap-md a {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.cmap-md a:hover {
+  opacity: 0.85;
+}
+
+.cmap-md code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: #f1f5f9;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1px 5px;
+}
+
+.cmap-md pre {
+  margin: 0.6em 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: #0b1020;
+  color: #e6e6e6;
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  line-height: 1.5;
+}
+
+.cmap-md pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.cmap-md blockquote {
+  margin: 0.6em 0;
+  padding: 4px 12px;
+  border-left: 3px solid #e5e7eb;
+  color: #4b5563;
+  background: #f9fafb;
+  border-radius: 0 8px 8px 0;
+}
+
+.cmap-md hr {
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 1em 0;
+}
+
+.cmap-md-table-wrap {
+  overflow-x: auto;
+  margin: 0.6em 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.cmap-md table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95em;
+}
+
+.cmap-md th,
+.cmap-md td {
+  border-bottom: 1px solid #eef2f7;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cmap-md thead th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+.cmap-md tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.cmap-md img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}

@@ -36,20 +36,6 @@ export function saveThreads(threads: ThreadMeta[]): void {
   localStorage.setItem(KEY_THREADS, JSON.stringify(threads));
 }
 
-export function upsertThread(meta: ThreadMeta): ThreadMeta[] {
-  const threads = loadThreads();
-  const idx = threads.findIndex(t => t.thread_id === meta.thread_id);
-  if (idx >= 0) {
-    threads[idx] = meta;
-  } else {
-    threads.unshift(meta);
-  }
-  // sort by updated_at desc
-  threads.sort((a, b) => (b.updated_at.localeCompare(a.updated_at)));
-  saveThreads(threads);
-  return threads;
-}
-
 export function loadExamplesDismissed(): boolean {
   return localStorage.getItem(KEY_EXAMPLES_DISMISSED) === "1";
 }

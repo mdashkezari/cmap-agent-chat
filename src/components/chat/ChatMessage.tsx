@@ -3,6 +3,7 @@ import type { ToolTraceItem, Artifact } from "../../api/types";
 import type { ChatTurn } from "../../uiTypes";
 import { stripCmapFileHints } from "../../utils/cmapFileHint";
 import { renderContentWithLinks } from "../common/LinkifiedText";
+import { MarkdownContent } from "../common/MarkdownContent";
 import { ArtifactsView } from "./ArtifactsView";
 import { CodeBlock } from "./CodeBlock";
 
@@ -332,16 +333,20 @@ export function ChatMessage({
       >
         <div style={{ fontSize: 12, opacity: 0.65, marginBottom: 6 }}>{turn.role === "user" ? "You" : "CMAP"}</div>
         {renderedContent ? (
-          <div
-            style={{
-              whiteSpace: "pre-wrap",
-              lineHeight: 1.5,
-              overflowWrap: "anywhere",
-              wordBreak: "break-word"
-            }}
-          >
-            {renderContentWithLinks(renderedContent)}
-          </div>
+          turn.role === "assistant" ? (
+            <MarkdownContent content={renderedContent} />
+          ) : (
+            <div
+              style={{
+                whiteSpace: "pre-wrap",
+                lineHeight: 1.5,
+                overflowWrap: "anywhere",
+                wordBreak: "break-word"
+              }}
+            >
+              {renderContentWithLinks(renderedContent)}
+            </div>
+          )
         ) : null}
 
         {turn.role === "user" ? <AttachmentChips attachments={turn.attachments} /> : null}

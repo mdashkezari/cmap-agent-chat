@@ -47,7 +47,7 @@ export default function App() {
     onNewChat,
     onSelectThread,
     onSend
-  } = useCmapAgentChat({ apiKey, sidebarOpen, setSidebarOpen });
+  } = useCmapAgentChat({ apiKey, sidebarOpen });
 
   const composerRef = useRef<HTMLTextAreaElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);

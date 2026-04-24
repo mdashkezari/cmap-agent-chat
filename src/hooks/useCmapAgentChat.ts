@@ -67,7 +67,6 @@ function guessContentType(file: File): string {
 export function useCmapAgentChat(opts: {
   apiKey: string;
   sidebarOpen: boolean;
-  setSidebarOpen: (v: boolean) => void;
 }) {
   const { apiKey, sidebarOpen } = opts;
 
@@ -290,7 +289,6 @@ export function useCmapAgentChat(opts: {
 
   return {
     threads,
-    setThreads,
     threadsLoading,
     threadLoadingId,
     refreshThreads,
